@@ -1,0 +1,16 @@
+{
+  "name": "stat-api",
+  "version": "1.0.0",
+  "description": "The API that handels all stat related calls for the stat tracker application",
+  "main": "./Api/Server.js",
+  "type": "module",
+  "scripts": {
+    "test": "Test"
+  },
+  "author": "LokiTheShadySpirit",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "https": "^1.0.0"
+  }
+}
