@@ -5,6 +5,7 @@
   "main": "./Api/Server.js",
   "type": "module",
   "scripts": {
+    "dev": "nodemon ./Api/Server.js",
     "test": "Test"
   },
   "author": "LokiTheShadySpirit",
