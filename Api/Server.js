@@ -1,14 +1,13 @@
 import https from "https";
 import fs from "fs";
 import app from "./API.js";
-import { Certificate } from "crypto";
 
 const port = process.env.PORT || 6000;
 
 const options = {
-  ca: fs.readFileSync("./Certificates/stattrackerapp.test.crt"),
-  key: fs.readFileSync("./Certificates/stattrackerapp.test.key"),
-  cert: fs.readFileSync("./Certificates/stattrackerapp.test.crt"),
+  ca: fs.readFileSync("../Certificates/ca.crt"),
+  key: fs.readFileSync("./Certs/localhost.key"),
+  cert: fs.readFileSync("./Certs/localhost.crt"),
 };
 const server = https.createServer(options, app);
 
