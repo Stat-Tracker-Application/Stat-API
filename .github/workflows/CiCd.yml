@@ -66,7 +66,3 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: lokitheshady/stat-tracker-stat-api:latest
-
-      - name: Deploy to Docker Desktop
-        run: |
-          docker-compose -f ./docker-compose.yml up -d
