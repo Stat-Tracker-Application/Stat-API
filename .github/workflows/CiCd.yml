@@ -69,4 +69,4 @@ jobs:
 
       - name: Deploy to Docker Desktop
         run: |
-          docker-compose -f ../docker-compose.yml up -d
+          docker-compose -f ./docker-compose.yml up -d
