@@ -38,11 +38,11 @@ jobs:
 
     - name: Install SonarCloud Scanner
       run: |
-        npm install -g sonarqube-scanner
+        npm install -g sonarcloud
 
     - name: Run SonarCloud scan
-      run: sonar-scanner
-
+      run: sonar-scanner -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+      
   deploy:
     runs-on: ubuntu-latest
 
