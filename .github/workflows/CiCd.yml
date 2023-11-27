@@ -57,10 +57,12 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./Dockerfile
+          file: ../Dockerfile
           push: true
-          tags: stat-tracker-stat-api:latest
-
+          repository: stat-tracker-stat-api
+          tags: stat-api:latest
+          username: ${secrets.DOCKER_HUB_USERNAME}
+          password: ${secrets.DOCKER_HUB_PASSWORD}
       - name: Deploy to Docker Desktop
         run: |
           docker-compose -f docker-compose.dev.yml up -d
