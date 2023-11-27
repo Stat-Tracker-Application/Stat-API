@@ -65,8 +65,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          repository: stat-tracker-stat-api
-          tags: stat-api:latest
+          tags: stat-tracker-stat-api:latest
 
       - name: Deploy to Docker Desktop
         run: |
