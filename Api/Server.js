@@ -8,3 +8,5 @@ const server = http.createServer(app);
 server.listen(port, function (req, res) {
   console.log(`Server is listening at port ${port}`);
 });
+
+export default server;
