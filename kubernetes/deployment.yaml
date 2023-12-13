@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stat
+  template:
+    metadata:
+      labels:
+        app: stat
+    spec:
+      containers:
+        - name: stat
+          image: lokitheshady/stat-tracker-stat-api:latest
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: stat-clusterip-srv
+spec:
+  selector:
+    app: stat
+  ports:
+    - name: stat
+      protocol: TCP
+      port: 5100
+      targetPort: 5100
