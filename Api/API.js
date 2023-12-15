@@ -4,7 +4,17 @@ import mongoose from "mongoose";
 
 const app = express();
 
-const CONNECTION_STRING = "mongodb://User1:Adminpw@Stat-Db:27017/Stat-Db"; //This can't remain here for obvious reasons
+const username = process.env.STATDB_USER;
+const password = process.env.STATDB_PASSWORD;
+
+const CONNECTION_STRING = `mongodb://${username}:${password}@statdb-service:5150/admin?authSource=admin&authMechanism=SCRAM-SHA-256`;
+
+console.log(CONNECTION_STRING);
+
+mongoose.connect(CONNECTION_STRING, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 // MongoDB connection
 mongoose.connect(CONNECTION_STRING, {

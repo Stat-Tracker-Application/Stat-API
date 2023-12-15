@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: statdb-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: statdb
+  template:
+    metadata:
+      labels:
+        app: statdb
+    spec:
+      containers:
+        - name: statdb
+          image: mongo:latest
+          resources:
+            limits:
+              cpu: "500m"
+          ports:
+            - containerPort: 27017
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: statdb-config
+                  key: statdb-user
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: statdb-config
+                  key: statdb-password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: statdb-service
+spec:
+  selector:
+    app: statdb
+  ports:
+    - port: 5150
+      targetPort: 27017

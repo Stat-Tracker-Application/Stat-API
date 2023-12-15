@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: statdb-config
+data:
+  statdbdb-url: statdb-service:5150
+  statdb-user: User1 ##encoding to base 64 and decoding in the app does not work
+  statdb-password: Adminpw ##encoding to base 64 and decoding in the app does not work

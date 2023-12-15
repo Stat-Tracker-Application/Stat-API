@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stat-api-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stat-api
+  template:
+    metadata:
+      labels:
+        app: stat-api
+    spec:
+      containers:
+        - name: stat-api
+          image: lokitheshady/stat-tracker-stat-api:latest
+          imagePullPolicy: Always
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 5100
+          env:
+            - name: STATDB_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: statdb-config
+                  key: statdb-user
+            - name: STATDB_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: statdb-config
+                  key: statdb-password
+            - name: MONGODB_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: statdb-config
+                  key: statdb-url
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: Stat-Api
+spec:
+  type: LoadBalancer
+  selector:
+    app: stat-api
+  ports:
+    - protocol: TCP
+      port: 5100
+      targetPort: 5100
