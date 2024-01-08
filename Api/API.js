@@ -1,11 +1,18 @@
 import express from "express";
 import bodyparser from "body-parser";
 import mongoose from "mongoose";
+import client from "prom-client";
 
 const app = express();
 
 const username = process.env.STATDB_USER;
 const password = process.env.STATDB_PASSWORD;
+
+const register = new client.Registry();
+register.setDefaultLabels({
+  app: "stat-api",
+});
+client.collectDefaultMetrics({ register });
 
 const CONNECTION_STRING = `mongodb://${username}:${password}@statdb-service:5150/admin?authSource=admin&authMechanism=SCRAM-SHA-256`;
 
@@ -109,6 +116,11 @@ app.get("/", function (req, res) {
   res.json({
     message: "Hello world from stat api",
   });
+});
+
+app.get("/metrics", function (req, res) {
+  res.setHeader("Content-Type", register.contentType);
+  res.end(register.metrics());
 });
 
 export default app;

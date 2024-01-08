@@ -15,7 +15,7 @@ spec:
       containers:
         - name: stat-api
           image: lokitheshady/stat-tracker-stat-api:latest
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           resources:
             limits:
               memory: "128Mi"
@@ -43,7 +43,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: Stat-Api
+  name: stat-api
 spec:
   type: LoadBalancer
   selector:

@@ -1,0 +1,18 @@
+apiVersion: keda.sh/v1alpha
+kind: ScaledObject
+metadata:
+  name: stat-api
+  labels:
+    app: stat-api
+spec:
+  maxReplicaCount: 5
+  pollingInterval: 15
+  scaleTargetRef:
+    name: stat-api-deployment
+  trigggers:
+    - type: prometheus
+      metadata:
+        serverAddress: "http://prometheus-server:80"
+        metricName: cpu_usage
+        query: sum(irate(process_cpu_seconds_total{app=stat-api}[2m])) * 100
+        threshold: "50"
