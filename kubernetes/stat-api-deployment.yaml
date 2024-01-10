@@ -14,7 +14,7 @@ spec:
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/path: "/metrics"
-        prometheus.io/port: ""
+        prometheus.io/port: "5100"
     spec:
       containers:
         - name: stat-api

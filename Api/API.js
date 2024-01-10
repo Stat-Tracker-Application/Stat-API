@@ -118,9 +118,15 @@ app.get("/", function (req, res) {
   });
 });
 
-app.get("/metrics", function (req, res) {
-  res.setHeader("Content-Type", register.contentType);
-  res.end(register.metrics());
+app.get("/metrics", async function (req, res) {
+  try {
+    res.setHeader("Content-Type", register.contentType);
+    const metrics = await register.metrics();
+    res.end(metrics);
+  } catch (error) {
+    console.error("Error generating metrics:", error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 export default app;
