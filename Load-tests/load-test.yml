@@ -1,0 +1,13 @@
+config:
+  target: http://localhost:5100
+  phases:
+    - duration: 120
+      arrivalRate: 100
+      rampTo: 100
+      name: Startup phase
+
+scenarios:
+  - name: "Trigger autoscaler"
+    flow:
+      - get:
+          url: "/"
