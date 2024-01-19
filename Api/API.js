@@ -21,9 +21,6 @@ const httpRequestDurationMicroseconds = new client.Histogram({
   buckets: [0.1, 5, 15, 50, 100, 200, 300, 400, 500],
 });
 
-// Register the histogram with the Prometheus client
-httpRequestDurationMicroseconds.register();
-
 const CONNECTION_STRING = `mongodb://${username}:${password}@statdb-service:5150/admin?authSource=admin&authMechanism=SCRAM-SHA-256`;
 
 console.log(CONNECTION_STRING);
@@ -155,6 +152,7 @@ app.use((err, req, res, next) => {
 
 // Runs after each requests
 app.use((req, res, next) => {
+  console.log("runs");
   const responseTimeInMs = Date.now() - res.locals.startEpoch;
 
   httpRequestDurationMicroseconds
