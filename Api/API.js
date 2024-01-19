@@ -14,6 +14,13 @@ register.setDefaultLabels({
 });
 client.collectDefaultMetrics({ register });
 
+const httpRequestDurationMicroseconds = new Prometheus.Histogram({
+  name: "http_request_duration_ms",
+  help: "Duration of HTTP requests in ms",
+  labelNames: ["method", "route", "code"],
+  buckets: [0.1, 5, 15, 50, 100, 200, 300, 400, 500], // buckets for response time from 0.1ms to 500ms
+});
+
 const CONNECTION_STRING = `mongodb://${username}:${password}@statdb-service:5150/admin?authSource=admin&authMechanism=SCRAM-SHA-256`;
 
 console.log(CONNECTION_STRING);
@@ -41,8 +48,14 @@ const StatModel = mongoose.model("Stat", statSchema);
 app.use(bodyparser.urlencoded({ extended: false }));
 app.use(bodyparser.json());
 
+// Runs before each requests
+app.use((req, res, next) => {
+  res.locals.startEpoch = Date.now();
+  next();
+});
+
 // Create
-app.post("/createstat", async (req, res) => {
+app.post("/createstat", async (req, res, next) => {
   try {
     const { Testname, TestStat } = req.body;
     const newStat = new StatModel({ Testname, TestStat });
@@ -60,7 +73,7 @@ app.post("/createstat", async (req, res) => {
 });
 
 // Read
-app.get("/getallstats", async (req, res) => {
+app.get("/getallstats", async (req, res, next) => {
   try {
     const stats = await StatModel.find();
     res.json(stats);
@@ -70,7 +83,7 @@ app.get("/getallstats", async (req, res) => {
 });
 
 // Read a specific stat by ID
-app.get("/getstatbyid/:id", async (req, res) => {
+app.get("/getstatbyid/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
     const stat = await StatModel.findById(id);
@@ -86,7 +99,7 @@ app.get("/getstatbyid/:id", async (req, res) => {
 });
 
 // Update
-app.put("/updatestat/:id", async (req, res) => {
+app.put("/updatestat/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
     const { Testname, TestStat } = req.body;
@@ -102,7 +115,7 @@ app.put("/updatestat/:id", async (req, res) => {
 });
 
 // Delete
-app.delete("/deletestat/:id", async (req, res) => {
+app.delete("/deletestat/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
     await StatModel.findByIdAndDelete(id);
@@ -112,7 +125,7 @@ app.delete("/deletestat/:id", async (req, res) => {
   }
 });
 
-app.get("/", function (req, res) {
+app.get("/", function (req, res, next) {
   res.json({
     message: "Hello world from stat api",
   });
@@ -129,4 +142,22 @@ app.get("/metrics", function (req, res) {
     });
 });
 
+// Error handler
+app.use((err, req, res, next) => {
+  res.statusCode = 500;
+  // Do not expose your error in production
+  res.json({ error: err.message });
+  next();
+});
+
+// Runs after each requests
+app.use((req, res, next) => {
+  const responseTimeInMs = Date.now() - res.locals.startEpoch;
+
+  httpRequestDurationMicroseconds
+    .labels(req.method, req.route.path, res.statusCode)
+    .observe(responseTimeInMs);
+
+  next();
+});
 export default app;
