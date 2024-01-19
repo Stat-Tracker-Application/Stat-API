@@ -14,7 +14,7 @@ register.setDefaultLabels({
 });
 client.collectDefaultMetrics({ register });
 
-const httpRequestDurationMicroseconds = new Prometheus.Histogram({
+const httpRequestDurationMicroseconds = new client.Histogram({
   name: "http_request_duration_ms",
   help: "Duration of HTTP requests in ms",
   labelNames: ["method", "route", "code"],
