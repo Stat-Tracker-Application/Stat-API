@@ -21,6 +21,8 @@ const httpRequestDurationMicroseconds = new client.Histogram({
   buckets: [0.1, 5, 15, 50, 100, 200, 300, 400, 500],
 });
 
+register.registerMetric(httpRequestDurationMicroseconds);
+
 const CONNECTION_STRING = `mongodb://${username}:${password}@statdb-service:5150/admin?authSource=admin&authMechanism=SCRAM-SHA-256`;
 
 console.log(CONNECTION_STRING);
