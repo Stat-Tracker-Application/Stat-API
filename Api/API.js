@@ -154,13 +154,24 @@ app.use((err, req, res, next) => {
 
 // Runs after each requests
 app.use((req, res, next) => {
-  console.log("runs");
-  const responseTimeInMs = Date.now() - res.locals.startEpoch;
+  const startEpoch = res.locals.startEpoch;
+  console.log("Request start time:", startEpoch);
+
+  // Add logging for method, route, and status code
+  const method = req.method;
+  const route = req.route ? req.route.path : "unknown-route";
+  const statusCode = res.statusCode;
+
+  console.log("Request details:", { method, route, statusCode });
+
+  const responseTimeInMs = Date.now() - startEpoch;
+  console.log("Response time in ms:", responseTimeInMs);
 
   httpRequestDurationMicroseconds
-    .labels(req.method, req.route.path, res.statusCode)
+    .labels(method, route, statusCode)
     .observe(responseTimeInMs);
 
   next();
 });
+
 export default app;
