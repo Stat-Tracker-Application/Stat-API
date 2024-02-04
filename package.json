@@ -17,7 +17,7 @@
     "nodemon": "^3.0.1",
     "prom-client": "^15.1.0",
     "snyk": "^1.1269.0",
-    "supertest": "^6.3.3"
+    "supertest": "^6.3.4"
   },
   "devDependencies": {
     "@babel/core": "^7.23.3",
