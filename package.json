@@ -11,13 +11,13 @@
   "author": "LokiTheShadySpirit",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2",
+    "express": "^4.22.0",
     "https": "^1.0.0",
     "mongoose": "^8.0.2",
     "nodemon": "^3.0.1",
     "prom-client": "^15.1.0",
     "snyk": "^1.1269.0",
-    "supertest": "^6.3.3"
+    "supertest": "^7.1.3"
   },
   "devDependencies": {
     "@babel/core": "^7.23.3",
